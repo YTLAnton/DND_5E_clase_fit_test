@@ -13,6 +13,7 @@
             --text-color: #ecf0f1;
             --bg-color: #1a1a1d;
             --card-bg: #2d3436;
+            --disabled-color: #7f8c8d;
         }
 
         body {
@@ -30,19 +31,18 @@
         header {
             background: linear-gradient(135deg, #4b130f, #2c3e50);
             width: 100%;
-            /* 調整 padding 讓 header 不會過高 */
             padding: 1.5rem 1rem;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             border-bottom: 3px solid var(--accent-color);
-            box-sizing: border-box; /* 確保 padding 不會撐爆寬度 */
+            box-sizing: border-box;
         }
 
         h1 {
             margin: 0;
             font-size: 2.5rem;
             text-shadow: 2px 2px 4px #000;
-            line-height: 1.2; /* 避免標題多行時黏在一起 */
+            line-height: 1.2;
         }
 
         p.subtitle {
@@ -58,7 +58,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* 讓內容在垂直方向也居中 */
+            justify-content: center;
         }
 
         /* 卡片共用樣式 */
@@ -66,7 +66,6 @@
             background-color: var(--card-bg);
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            /* 預設 padding */
             padding: 3rem; 
         }
 
@@ -85,8 +84,8 @@
             transition: transform 0.2s, background-color 0.2s;
             margin-top: 2rem;
             font-weight: bold;
-            width: 100%; /* 手機上按鈕滿版比較好按 */
-            max-width: 300px; /* 電腦上限制最大寬度 */
+            width: 100%;
+            max-width: 300px;
         }
 
         .btn:hover {
@@ -138,12 +137,56 @@
             cursor: pointer;
             transition: all 0.2s;
             font-size: 1.1rem;
-            line-height: 1.4; /* 增加行高，閱讀舒適 */
+            line-height: 1.4;
+            position: relative;
+            overflow: hidden;
         }
 
-        .option-btn:hover, .option-btn:active {
+        .option-btn:hover {
             background-color: #4a69bd;
             transform: translateX(5px);
+        }
+
+        /* [新增] 選中項目的光芒標記 */
+        .option-btn.selected {
+            background-color: #4a69bd;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(241, 196, 15, 0.6); /* 金色光暈 */
+            font-weight: bold;
+        }
+
+        /* [新增] 底部導覽按鈕區 */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid #7f8c8d;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+            flex: 1; /* 讓按鈕均分寬度 */
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background-color: #34495e;
+            border-color: var(--text-color);
+        }
+
+        /* [新增] 按鈕禁用狀態 (反灰) */
+        .nav-btn:disabled {
+            background-color: #2c3e50;
+            color: var(--disabled-color);
+            border-color: #444;
+            cursor: not-allowed;
+            opacity: 0.6;
         }
 
         /* Result Screen */
@@ -211,7 +254,7 @@
         
         .subclass-item strong {
             color: #fff;
-            display: block; /* 讓子職業名稱自己一行，比較清楚 */
+            display: block;
             margin-bottom: 0.2rem;
         }
 
@@ -223,56 +266,26 @@
             padding-bottom: 2rem;
         }
 
-        /* ------------------------------------------- */
-        /* [Antigravity] RWD 核心調整區 (Media Queries) */
-        /* ------------------------------------------- */
-        
-        /* 平板與桌面 (大於 768px) */
         @media (min-width: 768px) {
             .options-grid {
-                grid-template-columns: 1fr 1fr; /* 選項變兩欄 */
+                grid-template-columns: 1fr 1fr;
+            }
+            /* 電腦版按鈕可以小一點，不用滿寬 */
+            .nav-btn {
+                flex: 0 0 auto;
+                min-width: 120px;
             }
         }
 
-        /* 手機版 (小於 600px) */
         @media (max-width: 600px) {
-            h1 {
-                font-size: 1.8rem; /* 標題縮小 */
-            }
-
-            .container {
-                width: 95%; /* 手機版兩側留白減少 */
-                margin: 1rem auto;
-            }
-
-            /* 卡片內距大幅減少，把空間留給內容 */
-            #start-screen, #quiz-container, .result-card {
-                padding: 1.5rem 1rem; 
-            }
-
-            .question-text {
-                font-size: 1.2rem; /* 題目字體稍微縮小 */
-                margin-bottom: 1.5rem;
-            }
-
-            .option-btn {
-                padding: 1rem; /* 按鈕內距稍微縮小 */
-                font-size: 1rem;
-            }
-
-            .result-title {
-                font-size: 2rem;
-            }
-
-            .result-desc {
-                padding: 1rem; /* 結果描述框內距減少 */
-                font-size: 1rem;
-            }
-            
-            /* 讓子職業名稱與描述分行顯示的間距 */
-            .subclass-item {
-                font-size: 0.95rem;
-            }
+            h1 { font-size: 1.8rem; }
+            .container { width: 95%; margin: 1rem auto; }
+            #start-screen, #quiz-container, .result-card { padding: 1.5rem 1rem; }
+            .question-text { font-size: 1.2rem; margin-bottom: 1.5rem; }
+            .option-btn { padding: 1rem; font-size: 1rem; }
+            .result-title { font-size: 2rem; }
+            .result-desc { padding: 1rem; font-size: 1rem; }
+            .subclass-item { font-size: 0.95rem; }
         }
     </style>
 </head>
@@ -286,7 +299,7 @@
 <div class="container">
     <div id="start-screen">
         <h2>準備好踏上冒險了嗎？</h2>
-        <p>這份測驗將根據你的決策風格、戰鬥偏好與價值觀，從 D&D 5E 的 12 個基礎職業中找出最適合你的一個，也根據你的選擇，最終會提供適合的子職業供參考。</p>
+        <p>這份測驗將根據決策風格、戰鬥偏好與價值觀，從 D&D 5E 的 12 個基礎職業中找出最適合你的一個。</p>
         <button class="btn" onclick="startQuiz()">開始測驗</button>
     </div>
 
@@ -298,6 +311,11 @@
             <h3 class="question-text" id="question-text">題目載入中...</h3>
             <div class="options-grid" id="options-box">
                 </div>
+            
+            <div class="nav-buttons">
+                <button id="prev-btn" class="nav-btn" onclick="prevQuestion()"><i class="fas fa-arrow-left"></i> 上一題</button>
+                <button id="next-btn" class="nav-btn" onclick="handleNextClick()">下一題 <i class="fas fa-arrow-right"></i></button>
+            </div>
         </div>
     </div>
 
@@ -314,7 +332,7 @@
             <div class="subclass-box">
                 <h3 class="subclass-title">推薦子職業（Archetypes）</h3>
                 <div id="subclass-recommendations">
-                    </div>
+                </div>
             </div>
 
             <button class="btn" onclick="restartQuiz()">重新測驗</button>
@@ -328,10 +346,6 @@
 </div>
 
 <script>
-    // 職業代碼: 
-    // barbarian(野蠻人), bard(吟遊詩人), cleric(牧師), druid(德魯伊), fighter(戰士), monk(武僧), 
-    // paladin(聖武士), ranger(遊俠), rogue(盜賊), sorcerer(術士), warlock(契術師), wizard(法師)
-
     const questions = [
         {
             text: "1. 當你遇到一扇深鎖的厚重木門，而門後可能藏有寶藏，你的第一直覺是？",
@@ -560,7 +574,6 @@
         }
     ];
 
-    // 職業資訊 (包含子職業建議)
     const classInfo = {
         barbarian: {
             title: "野蠻人 (Barbarian)",
@@ -641,7 +654,7 @@
         },
         ranger: {
             title: "遊俠 (Ranger)",
-            icon: "<i class='fas fa-bow-arrow'></i>", // FontAwesome fix needed, using text usually
+            icon: "<i class='fas fa-bow-arrow'></i>",
             flavor: "荒野的獵手，邊境的巡邏者。",
             desc: "你是文明邊緣的守望者，擅長追蹤、狩獵與伏擊。你結合了戰鬥技巧與自然魔法，通常還有動物夥伴相隨，或者精通雙刀與弓箭。",
             subclasses: [
@@ -697,14 +710,17 @@
     };
 
     let currentQuestion = 0;
-    let scores = {
-        barbarian: 0, bard: 0, cleric: 0, druid: 0, fighter: 0, monk: 0,
-        paladin: 0, ranger: 0, rogue: 0, sorcerer: 0, warlock: 0, wizard: 0
-    };
+    // [新增] 用來記錄使用者的選擇 (null 代表未選，0,1,2,3 代表選項 index)
+    let userAnswers = [];
 
     function startQuiz() {
         document.getElementById('start-screen').style.display = 'none';
         document.getElementById('quiz-container').style.display = 'block';
+        
+        // 初始化答案陣列
+        userAnswers = new Array(questions.length).fill(null);
+        currentQuestion = 0;
+        
         loadQuestion();
     }
 
@@ -715,30 +731,98 @@
         const optionsBox = document.getElementById('options-box');
         optionsBox.innerHTML = '';
 
-        q.options.forEach(opt => {
+        q.options.forEach((opt, index) => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
             btn.innerText = opt.text;
-            btn.onclick = () => selectOption(opt.scores);
+            
+            // [新增] 檢查是否為已選選項，加上 selected class
+            if (userAnswers[currentQuestion] === index) {
+                btn.classList.add('selected');
+            }
+
+            // 傳入 index 以便紀錄
+            btn.onclick = () => selectOption(index);
             optionsBox.appendChild(btn);
         });
 
         updateProgress();
+        updateNavButtons(); // 更新上一題/下一題按鈕狀態
     }
 
-    function selectOption(points) {
-        // Add scores
-        for (let cls in points) {
-            if (scores.hasOwnProperty(cls)) {
-                scores[cls] += points[cls];
+    // [修改] 選擇選項的邏輯
+    function selectOption(optionIndex) {
+        // 1. 記錄選擇
+        userAnswers[currentQuestion] = optionIndex;
+        
+        // 2. 更新 UI (立刻加上光芒，讓使用者知道有點到)
+        const buttons = document.querySelectorAll('.option-btn');
+        buttons.forEach((btn, idx) => {
+            if (idx === optionIndex) {
+                btn.classList.add('selected');
+            } else {
+                btn.classList.remove('selected');
+            }
+        });
+
+        // 3. 啟用「下一題」按鈕
+        updateNavButtons();
+
+        // 4. 自動跳轉 (延遲一下讓使用者看到光芒)
+        setTimeout(() => {
+            // 如果還沒換頁 (防止使用者連點或手動按了上一頁)
+            if (userAnswers[currentQuestion] === optionIndex) {
+                nextQuestion();
+            }
+        }, 300); 
+    }
+
+    // [新增] 上一題邏輯
+    function prevQuestion() {
+        if (currentQuestion > 0) {
+            currentQuestion--;
+            loadQuestion();
+        }
+    }
+
+    // [新增] 下一題邏輯
+    function nextQuestion() {
+        // 只有已選擇答案才能前往下一題
+        if (userAnswers[currentQuestion] !== null) {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
             }
         }
+    }
 
-        currentQuestion++;
-        if (currentQuestion < questions.length) {
-            loadQuestion();
+    // [新增] 處理點擊「下一題」按鈕
+    function handleNextClick() {
+        nextQuestion();
+    }
+
+    // [新增] 更新導覽按鈕狀態
+    function updateNavButtons() {
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        // 第一題不能按上一題
+        prevBtn.disabled = (currentQuestion === 0);
+
+        // 如果還沒選答案，不能按下一題
+        if (userAnswers[currentQuestion] === null) {
+            nextBtn.disabled = true;
         } else {
-            showResult();
+            nextBtn.disabled = false;
+        }
+
+        // 最後一題將按鈕文字改為「看結果」
+        if (currentQuestion === questions.length - 1) {
+             nextBtn.innerHTML = '看結果 <i class="fas fa-flag-checkered"></i>';
+        } else {
+             nextBtn.innerHTML = '下一題 <i class="fas fa-arrow-right"></i>';
         }
     }
 
@@ -751,18 +835,38 @@
         document.getElementById('quiz-container').style.display = 'none';
         document.getElementById('result-screen').style.display = 'block';
 
-        // Calculate winner
+        // [修改] 在最後一刻才計算分數
+        calculateAndDisplayResult();
+    }
+
+    // [新增] 計算總分與顯示結果
+    function calculateAndDisplayResult() {
+        let finalScores = {
+            barbarian: 0, bard: 0, cleric: 0, druid: 0, fighter: 0, monk: 0,
+            paladin: 0, ranger: 0, rogue: 0, sorcerer: 0, warlock: 0, wizard: 0
+        };
+
+        // 遍歷所有使用者的回答
+        userAnswers.forEach((optionIndex, questionIndex) => {
+            if (optionIndex !== null) {
+                // 找出該選項對應的分數
+                const points = questions[questionIndex].options[optionIndex].scores;
+                for (let cls in points) {
+                    if (finalScores.hasOwnProperty(cls)) {
+                        finalScores[cls] += points[cls];
+                    }
+                }
+            }
+        });
+
+        // 找出最高分
         let maxScore = -1;
         let winner = '';
         
-        // Find highest score
-        for (let cls in scores) {
-            if (scores[cls] > maxScore) {
-                maxScore = scores[cls];
+        for (let cls in finalScores) {
+            if (finalScores[cls] > maxScore) {
+                maxScore = finalScores[cls];
                 winner = cls;
-            } else if (scores[cls] === maxScore) {
-                // Simple tie-breaker: prioritize simpler classes for randomness or just keep first
-                // For this logic, we just keep the first one encountered or random could be added
             }
         }
 
@@ -784,11 +888,7 @@
     }
 
     function restartQuiz() {
-        currentQuestion = 0;
-        scores = {
-            barbarian: 0, bard: 0, cleric: 0, druid: 0, fighter: 0, monk: 0,
-            paladin: 0, ranger: 0, rogue: 0, sorcerer: 0, warlock: 0, wizard: 0
-        };
+        // 重置邏輯移到 startQuiz 中處理
         document.getElementById('result-screen').style.display = 'none';
         document.getElementById('start-screen').style.display = 'block';
     }
